@@ -1,0 +1,6 @@
+# Your Pages project name – shown in the dashboard and your published URL
+name = "mario46"  
+# Tell Wrangler where your built output (static + Functions) lives
+pages_build_output_dir = "public"  
+# Pin to today's compatibility date so edge behavior is consistent
+compatibility_date = "2025-05-20"  
