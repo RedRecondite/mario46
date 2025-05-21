@@ -2,5 +2,4 @@ name = "mario64"
 compatibility_date = "2025-05-20"
 
 # Tell Wrangler where your Pages Functions live
-functions = { directory = "functions" }
 pages_build_output_dir = "public"
