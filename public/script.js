@@ -1,5 +1,5 @@
-// Polls /api/deals and renders with Tailwind styling + fade in/out
-const API = "/api/deals";
+// Polls /deals and renders with Tailwind styling + fade in/out
+const API = "/deals";
 const tbody = document.getElementById("deals-table");
 let seen = new Set(JSON.parse(localStorage.getItem("seenDeals") || "[]"));
 
