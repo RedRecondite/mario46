@@ -18,19 +18,33 @@ function render(deals) {
 
   deals.forEach((d) => {
     const tr = document.createElement("tr");
-    tr.className = "transition-opacity duration-10000 cursor-pointer hover:bg-gray-50";
-    if (seen.has(d.id)) tr.classList.add("opacity-30"); else tr.classList.add("opacity-100");
-    tr.onclick = () => window.open(d.url, "_blank");
+    
+    // Base classes without cursor-pointer
+    let rowClasses = "transition-opacity duration-10000 hover:bg-gray-50";
+
+    if (seen.has(d.id)) {
+      rowClasses += " opacity-30";
+    } else {
+      rowClasses += " opacity-100";
+    }
+
+    // Conditional click handler and cursor style based on d.url
+    if (d.url && d.url.trim() !== "") {
+      tr.onclick = () => window.open(d.url, "_blank");
+      rowClasses += " cursor-pointer";
+    }
+    
+    tr.className = rowClasses;
 
     const nameTd = document.createElement("td");
     nameTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-900";
     nameTd.textContent = d.name;
 
     const priceTd = document.createElement("td");
-    priceTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-700";
-    priceTd.textContent = d.price;
+    priceTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-700 min-w-[6rem]";
+    priceTd.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
 
-    tr.append(nameTd, priceTd);
+    tr.append(priceTd, nameTd); // Reordered: Price first, then Item
     tbody.appendChild(tr);
 
     if (!seen.has(d.id)) {
