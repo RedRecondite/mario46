@@ -23,7 +23,7 @@ function render(deals) {
     let rowClasses = "transition-opacity duration-10000 hover:bg-gray-50";
 
     if (seen.has(d.id)) {
-      rowClasses += " opacity-30";
+      rowClasses += " opacity-80";
     } else {
       rowClasses += " opacity-100";
     }
@@ -49,7 +49,7 @@ function render(deals) {
 
     if (!seen.has(d.id)) {
       setTimeout(() => {
-        tr.classList.replace("opacity-100", "opacity-30");
+        tr.classList.replace("opacity-100", "opacity-80");
         seen.add(d.id);
         newSeen.push(d.id);
         localStorage.setItem("seenDeals", JSON.stringify(newSeen));
