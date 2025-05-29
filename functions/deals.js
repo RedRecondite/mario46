@@ -12,16 +12,50 @@ export async function onRequest(context) {
   const deals = data.feed
     .map((post) => {
       const text = post.post.record.text || "";
-      // extract first URL in text
-      const urlMatch = text.match(/https?:\/\/(\S+)/);
-      const link = urlMatch ? urlMatch[0] : "";
-      // extract price
+      let extractedLink = "";
+
+      // 1. Try to extract link from facets
+      const facets = post.post.record.facets;
+      if (Array.isArray(facets)) {
+        for (const facet of facets) {
+          if (facet && Array.isArray(facet.features)) {
+            for (const feature of facet.features) {
+              if (feature && feature.$type === "app.bsky.richtext.facet#link" && 
+                  feature.uri && typeof feature.uri === 'string' && feature.uri.trim() !== '') {
+                extractedLink = feature.uri.trim();
+                break; // Found the first link, exit inner loop
+              }
+            }
+          }
+          if (extractedLink) break; // Exit outer loop if link is found
+        }
+      }
+
+      // 2. If no link from facets, fall back to regex on text
+      if (!extractedLink) {
+        const urlRegex = /(?:https?:\/\/|www\.)[\w\-\.]+\.[a-zA-Z]{2,}(?:\/\S*)?|[\w-]+\.(?:com|org|net|io|dev|co|uk|us|ca|info|biz|gg|deals|shop|store|app|link|xyz|me|tv)\b(?:\/\S*)?/i;
+        const urlMatch = text.match(urlRegex);
+        if (urlMatch && urlMatch[0]) {
+          extractedLink = urlMatch[0];
+        }
+      }
+      
+      // 3. Extract price (existing logic)
       const priceMatch = text.match(/[$€]\d+(?:\.\d+)?/);
+      
+      // 4. Generate name
+      let dealName = text; // Start with the full text
+      if (extractedLink && dealName.includes(extractedLink)) {
+        // If the extracted link is found in the text, remove it
+        dealName = dealName.replace(extractedLink, "");
+      }
+      dealName = dealName.trim(); // Trim whitespace from the name
+      
       return {
         id: post.post.cid,
-        name: text.replace(/https?:\/\/(\S+)/, "").trim(),
+        name: dealName,
         price: priceMatch ? priceMatch[0] : "",
-        url: link,
+        url: extractedLink,
         timestamp: post.post.record.createdAt,
       };
     })
