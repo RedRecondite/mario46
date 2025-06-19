@@ -36,15 +36,19 @@ function render(deals) {
     
     tr.className = rowClasses;
 
-    const nameTd = document.createElement("td");
-    nameTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-900";
-    nameTd.textContent = d.name;
+    const platformTd = document.createElement("td");
+    platformTd.className = "px-6 py-4 whitespace-nowrap text-sm text-center"; // Emoji itself has color
+    platformTd.textContent = d.platform;
 
     const priceTd = document.createElement("td");
     priceTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-700 min-w-[6rem]";
     priceTd.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
 
-    tr.append(priceTd, nameTd); // Reordered: Price first, then Item
+    const nameTd = document.createElement("td");
+    nameTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-900";
+    nameTd.textContent = d.name;
+
+    tr.append(platformTd, priceTd, nameTd);
     tbody.appendChild(tr);
 
     if (!seen.has(d.id)) {
