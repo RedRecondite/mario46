@@ -1,4 +1,31 @@
 // Fetch latest posts from Wario64 on Bluesky and expose as JSON
+
+const PLATFORM_MAP = [
+  { keywords: ['switch'], emoji: '🔀' },
+  { keywords: ['xbox series x', 'xbox series s', 'xbox'], emoji: '🟢' },
+  { keywords: ['steam'], emoji: '♨' },
+  { keywords: ['gog', 'good old games'], emoji: '👴' },
+  { keywords: ['ps4', 'ps5', 'playstation', 'psn'], emoji: '🎮' },
+  { keywords: ['dvd', 'blu-ray', 'bluray', '4k uhd', 'uhd'], emoji: '📀' },
+  { keywords: ['t-shirt', 'shirt'], emoji: '👕' },
+  { keywords: ['pc', 'computer', 'controller', 'windows'], emoji: '💻' }
+];
+
+function getPlatformEmoji(description) {
+  if (!description) {
+    return "";
+  }
+  const lowerDescription = description.toLowerCase();
+  for (const platform of PLATFORM_MAP) {
+    for (const keyword of platform.keywords) {
+      if (lowerDescription.includes(keyword.toLowerCase())) {
+        return platform.emoji;
+      }
+    }
+  }
+  return "";
+}
+
 export async function onRequest(context) {
   const ACTOR = "did:plc:knj5sw5al3sukl6vhkpi7637";
   const LIMIT = 50;
@@ -50,12 +77,14 @@ export async function onRequest(context) {
         dealName = dealName.replace(extractedLink, "");
       }
       dealName = dealName.trim(); // Trim whitespace from the name
+      const platformEmoji = getPlatformEmoji(dealName);
       
       return {
         id: post.post.cid,
         name: dealName,
         price: priceMatch ? priceMatch[0] : "",
         url: extractedLink,
+        platform: platformEmoji,
         timestamp: post.post.record.createdAt,
       };
     })
