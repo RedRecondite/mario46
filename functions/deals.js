@@ -8,7 +8,10 @@ const PLATFORM_MAP = [
   { keywords: ['ps4', 'ps5', 'playstation', 'psn'], emoji: '🎮' },
   { keywords: ['dvd', 'blu-ray', 'bluray', '4k uhd', 'uhd'], emoji: '📀' },
   { keywords: ['t-shirt', 'shirt'], emoji: '👕' },
-  { keywords: ['pc', 'computer', 'controller', 'windows'], emoji: '💻' }
+  { keywords: ['pc', 'computer', 'controller', 'windows', 'cable'], emoji: '💻' },
+  { keywords: ['book'], emoji: '📚' },
+  { keywords: ['humble', 'bundle'], emoji: '📦' },
+  { keywords: ['figure'], emoji: '🕴' },
 ];
 
 function getPlatformEmoji(description) {
