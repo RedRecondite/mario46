@@ -37,7 +37,7 @@ function render(deals) {
     tr.className = rowClasses;
 
     const platformTd = document.createElement("td");
-    platformTd.className = "px-6 py-4 whitespace-nowrap text-sm"; // Emoji itself has color
+    platformTd.className = "px-6 py-4 whitespace-nowrap text-sm text-center"; // Emoji itself has color
     platformTd.textContent = d.platform;
 
     const priceTd = document.createElement("td");
