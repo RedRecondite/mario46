@@ -1,7 +1,7 @@
 # MARIO46 
 
 - Use a single requirements document stored in `REQ.md`.
-- Document all features in the requirements.
+- Document all new feature requests in the requirements.
 
 ## Requirements Format Guide
 
@@ -103,6 +103,8 @@ definition: shared-config.yaml
 - Empty line separates text from metadata
 - Use `**bold**` labels for attributes and associations
 - End lines with two spaces for proper line breaks
+- Do not change existing requirement IDs; requirements text may evolve (and the ID may rename the same), but the IDs cannot change arbitrarily.
+- New requirements IDs should always be added with a new number; avoid re-using old numbers or using new ids that are gaps between existing requirements.
 
 #### Linking
 
