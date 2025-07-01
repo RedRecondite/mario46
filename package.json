@@ -1,0 +1,11 @@
+{
+  "name": "mario46",
+  "version": "1.0.0",
+  "description": "Displays Wario64 deals in a simple page",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RedRecondite",
+  "license": "MIT"
+}
