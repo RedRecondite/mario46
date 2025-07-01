@@ -2,6 +2,8 @@
 
 - Use a single requirements document stored in `REQ.md`.
 - Document all new feature requests in the requirements.
+- Create unit tests for all new features
+- AI cannot modify `GEMINI.md` - if any updates are needed, create a new `GEMINI_UPDATES.md` file with the new content.
 
 ## Requirements Format Guide
 
@@ -149,3 +151,49 @@ This format works perfectly with GitHub:
 - GitHub search finds requirements across your project
 
 The format scales from simple single-file projects to complex systems with hundreds of interconnected requirements.
+
+## Unit Testing Strategy
+
+This document outlines the strategy for unit testing in this project.
+
+### Guiding Principles
+
+- **Test Early, Test Often:** Unit tests should be written as early as possible in the development cycle.
+- **Focus on Units:** Each test should focus on a small, isolated piece of code (e.g., a function or a method).
+- **Independence:** Tests should be independent of each other. The failure of one test should not affect others.
+- **Repeatability:** Tests should produce the same results every time they are run.
+- **Clarity:** Tests should be easy to read and understand.
+
+### What to Test
+
+- **Core Logic:** Test the main functionality of each unit.
+- **Edge Cases:** Test how the unit behaves with unusual or extreme inputs.
+- **Error Handling:** Test how the unit handles errors and exceptions.
+- **Boundary Conditions:** Test the unit's behavior at the boundaries of valid input ranges.
+
+### Tools and Frameworks
+
+- **Test Runner:** We will use TODO.
+- **Assertion Methods:** TODO
+
+### Test Organization
+
+- **Directory Structure:** All unit tests will be placed in a dedicated `tests/` directory at the root of the project.
+- **File Naming:** Test files should be named TODO.
+- **Test Case Naming:** Test case classes should be named TODO.
+- **Test Method Naming:** Test methods should be named TODO.
+
+### Running Tests
+
+Tests can be run from the command line using the following command:
+
+```bash
+TODO
+```
+
+### Association with Requirements
+
+Each requirement in `REQ.md` will be associated with its corresponding unit test(s) using the `TestedBy` attribute. This ensures traceability between requirements and tests.
+---
+
+This strategy will help ensure the quality and reliability of our codebase.

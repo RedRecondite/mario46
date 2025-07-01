@@ -4,6 +4,9 @@ associations:
   ImplementedBy:
     target_prefix: "file"
     description: "Implemented by source files"
+  TestedBy:
+    target_prefix: "file"
+    description: "Tested by unit tests"
 ---
 
 # Wario64 Deals Requirements
