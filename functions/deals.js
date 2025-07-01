@@ -63,7 +63,9 @@ export async function onRequest(context) {
 
       // 2. If no link from facets, fall back to regex on text
       if (!extractedLink) {
-        const urlRegex = /(?:https?:\/\/|www\.)[\w\-\.]+\.[a-zA-Z]{2,}(?:\/\S*)?|[\w-]+\.(?:com|org|net|io|dev|co|uk|us|ca|info|biz|gg|deals|shop|store|app|link|xyz|me|tv)\b(?:\/\S*)?/i;
+        // Regex improved to better capture various TLDs and ensure subdomain.domain.tld structure
+        // Simplified the second part of OR to be more specific for domain.tld or subdomain.domain.tld
+        const urlRegex = /(?:https?:\/\/|www\.)[\w\-\.]+\.[a-zA-Z]{2,}(?:\/\S*)?|([\w-]+\.)+([a-zA-Z]{2,})(?:\/\S*)?/i;
         const urlMatch = text.match(urlRegex);
         if (urlMatch && urlMatch[0]) {
           extractedLink = urlMatch[0];
@@ -77,9 +79,9 @@ export async function onRequest(context) {
       let dealName = text; // Start with the full text
       if (extractedLink && dealName.includes(extractedLink)) {
         // If the extracted link is found in the text, remove it
-        dealName = dealName.replace(extractedLink, "");
+        dealName = dealName.replace(extractedLink, " "); // Replace with a space to avoid merging words
       }
-      dealName = dealName.trim(); // Trim whitespace from the name
+      dealName = dealName.replace(/\s+/g, ' ').trim(); // Collapse multiple spaces and trim
       const platformEmoji = getPlatformEmoji(dealName);
       
       return {
