@@ -43,8 +43,8 @@ const scriptContent = fs.readFileSync(path.resolve(__dirname, '../public/script.
 // Helper function to set up the DOM for tests
 function setupDOM() {
   document.body.innerHTML = `
-    <table id="deals-table">
-      <tbody id="deals-table-body"></tbody>
+    <table id="deals-table-container">
+      <tbody id="deals-table"></tbody>
     </table>
   `;
 }
@@ -148,7 +148,7 @@ describe('Frontend Script Logic - script.js', () => {
     await window.fetchAndRenderForTest(); // Manually call after setting mock for this test
     console.log('[TEST HLR-015] After fetchAndRenderForTest call'); // DEBUG
 
-    const tableBody = document.querySelector('#deals-table-body');
+    const tableBody = document.querySelector('#deals-table');
     const rows = tableBody.querySelectorAll('tr');
     expect(rows.length).toBe(2);
 
@@ -180,7 +180,7 @@ describe('Frontend Script Logic - script.js', () => {
 
     await window.fetchAndRenderForTest(); // Manually call
 
-    const row = document.querySelector('#deals-table-body tr');
+    const row = document.querySelector('#deals-table tr');
     expect(row.classList.contains('cursor-pointer')).toBe(true);
 
     row.dispatchEvent(new MouseEvent('click', { bubbles: true })); // Simulate click
@@ -201,7 +201,7 @@ describe('Frontend Script Logic - script.js', () => {
 
     await window.fetchAndRenderForTest(); // Manually call
 
-    const row = document.querySelector('#deals-table-body tr');
+    const row = document.querySelector('#deals-table tr');
     expect(row.style.cursor).not.toBe('pointer');
 
     row.dispatchEvent(new MouseEvent('click', { bubbles: true })); // Simulate click
@@ -230,7 +230,7 @@ describe('Frontend Script Logic - script.js', () => {
     // await Promise.resolve(); // Wait for fetch and rendering
     await window.fetchAndRenderForTest(); // Manually call
 
-    const rows = document.querySelectorAll('#deals-table-body tr');
+    const rows = document.querySelectorAll('#deals-table tr');
     // Deals are prepended, so 'n1' (newest) will be row 0, 's1' will be row 1
     const newDealRow = Array.from(rows).find(row => row.dataset.dealId === 'n1');
     const seenDealRow = Array.from(rows).find(row => row.dataset.dealId === 's1');
@@ -269,7 +269,7 @@ describe('Frontend Script Logic - script.js', () => {
     expect(fetch).toHaveBeenCalledTimes(1); // Call from this test, after mockReset in beforeEach
     expect(consoleErrorSpy).toHaveBeenCalledWith('[script.js] Error fetching deals:', expect.any(Error));
 
-    const tableBody = document.querySelector('#deals-table-body');
+    const tableBody = document.querySelector('#deals-table');
     expect(tableBody.innerHTML).toBe(''); // No deals rendered
 
     consoleErrorSpy.mockRestore();

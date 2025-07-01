@@ -3,7 +3,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
 
   // Polls /deals and renders with Tailwind styling + fade in/out
   const API = "/deals";
-  const tbody = document.getElementById("deals-table-body"); // Use specific ID for tbody
+  const tbody = document.getElementById("deals-table"); // Use specific ID for tbody
   let seen; // Declare, initialize in fetchAndRender
 
   async function fetchAndRender() {
