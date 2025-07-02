@@ -55,18 +55,18 @@ associations:
 
 > The system shall provide secure user authentication with support for multiple authentication methods.
 >
-> **Priority:** High  
-> **Status:** Approved  
-> **Decomposes:** [LLR-001](llr.md#llr-001), [LLR-002](llr.md#llr-002)  
-> **ImplementedBy:** [auth.py](src/auth.py)
+> - **Priority:** High  
+> - **Status:** Approved  
+> - **Decomposes:** [LLR-001](llr.md#llr-001), [LLR-002](llr.md#llr-002)  
+> - **ImplementedBy:** [auth.py](src/auth.py)
 
 ### HLR-002
 
 > The system shall support multi-factor authentication for enhanced security.
 >
-> **Priority:** Medium  
-> **Status:** Draft  
-> **Decomposes:** [LLR-003](llr.md#llr-003)
+> - **Priority:** Medium  
+> - **Status:** Draft  
+> - **Decomposes:** [LLR-003](llr.md#llr-003)
 ```
 
 ### Key Concepts
@@ -96,14 +96,14 @@ definition: shared-config.yaml
 
 > Requirement text goes first.
 >
-> **Attribute:** Value  
-> **Association:** [Link](file.md#target)
+> - **Attribute:** Value  
+> - **Association:** [Link](file.md#target)
 ```
 
 **Important rules:**
 - Requirement text comes first in the blockquote
 - Empty line separates text from metadata
-- Use `**bold**` labels for attributes and associations
+- Use `**bold**` list labels for attributes and associations
 - End lines with two spaces for proper line breaks
 - Do not change existing requirement IDs; requirements text may evolve (and the ID may rename the same), but the IDs cannot change arbitrarily.
 - New requirements IDs should always be added with a new number; avoid re-using old numbers or using new ids that are gaps between existing requirements.
