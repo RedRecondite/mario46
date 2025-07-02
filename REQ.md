@@ -11,7 +11,11 @@ associations:
 
 # Wario64 Deals Requirements
 
+This document outlines the high-level requirements for the Wario64 Deals application. It is divided into backend and frontend functionality, with specific requirements detailed in each section.
+
 ## Backend Functionality
+
+This section outlines requirements for the server-side logic, including data fetching from the Bluesky API, processing of deal information (such as extracting URLs, prices, and names), and providing an API endpoint for the frontend to consume the processed deals.
 
 ### HLR-001
 
@@ -73,6 +77,17 @@ associations:
 
 > The system shall map keywords found in the deal name to corresponding platform emojis based on a predefined list.  
 >
+> | Emoji | Keywords                                                     |
+> | :---- | :----------------------------------------------------------- |
+> | 🎮    | "game", "ps5", "playstation", "xbox", "nintendo", "switch", "steam" |
+> | 💿    | "blu-ray", "dvd", "4k"                                       |
+> | 💻    | "pc", "laptop", "computer"                                   |
+> | 📱    | "ios", "android"                                             |
+> | 🎧    | "headphone", "headset"                                       |
+> | 📺    | "tv", "monitor"                                              |
+> | 🤖    | "robot"                                                      |
+> | 📦    | "box"                                                        |
+>
 > **ImplementedBy:** [functions/deals.js](functions/deals.js)
 > **TestedBy:** [tests/deals.test.js](tests/deals.test.js)
 
@@ -98,6 +113,8 @@ associations:
 > **TestedBy:** [tests/deals.test.js](tests/deals.test.js)
 
 ## Frontend Functionality
+
+This section details requirements for the client-side user interface. This includes periodically fetching deal data from the backend API, rendering deals in a user-friendly table format, handling user interactions like clicking on deals to open them in a new tab, and using local storage to remember which deals the user has already seen.
 
 ### HLR-013
 
