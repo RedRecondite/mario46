@@ -217,6 +217,41 @@ This section details requirements for the client-side user interface. This inclu
 >
 > - **ImplementedBy:** [public/index.html](public/index.html)
 
+### HLR-029
+
+> The system shall display a filter control, such as a hamburger menu, to allow users to manage platform/emoji filters.
+>
+> - **ImplementedBy:** [public/index.html](public/index.html), [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-030
+
+> The system shall allow users to select or deselect individual platforms/emojis to filter the displayed deals.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-031
+
+> The system shall filter the deals displayed in the table based on the user's platform/emoji selections. If no filters are active, all deals should be shown.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-032
+
+> The system shall persist the user's filter preferences using browser cookies.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-033
+
+> The system shall load and apply any saved filter preferences from cookies when the page loads.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
 ### HLR-027
 
 > The system shall display a main heading "Wario64 Deals" on the page.  
