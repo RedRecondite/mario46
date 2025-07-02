@@ -79,14 +79,22 @@ This section outlines requirements for the server-side logic, including data fet
 >
 > | Emoji | Keywords                                                     |
 > | :---- | :----------------------------------------------------------- |
-> | 🎮    | "game", "ps5", "playstation", "xbox", "nintendo", "switch", "steam" |
-> | 💿    | "blu-ray", "dvd", "4k"                                       |
-> | 💻    | "pc", "laptop", "computer"                                   |
-> | 📱    | "ios", "android"                                             |
-> | 🎧    | "headphone", "headset"                                       |
-> | 📺    | "tv", "monitor"                                              |
-> | 🤖    | "robot"                                                      |
-> | 📦    | "box"                                                        |
+> | 🔀    | "nintendo", "switch", "eShop", "game-key"                    |
+> | 🟢    | "xbox series x", "xbox series s", "xbox"                     |
+> | ♨    | "steam"                                                      |
+> | 👴    | "gog", "good old games"                                      |
+> | 🎮    | "ps4", "ps5", "playstation", "psn", "ps+", "game"            |
+> | 📀    | "dvd", "blu-ray", "bluray", "4k uhd", "uhd", "film"          |
+> | 👕    | "t-shirt", "shirt", "merch"                                  |
+> | 💻    | "pc", "computer", "controller", "windows", "cable", "laptop" |
+> | 📚    | "book"                                                       |
+> | 📦    | "humble", "bundle", "box"                                    |
+> | 🕴    | "figure"                                                     |
+> | 🧱    | "LEGO" (lowest priority)                                     |
+> | 📱    | "ios", "android" (previously listed, maintained)             |
+> | 🎧    | "headphone", "headset" (previously listed, maintained)       |
+> | 📺    | "tv", "monitor" (previously listed, maintained)              |
+> | 🤖    | "robot" (previously listed, maintained)                      |
 >
 > **ImplementedBy:** [functions/deals.js](functions/deals.js)
 > **TestedBy:** [tests/deals.test.js](tests/deals.test.js)

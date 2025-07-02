@@ -284,6 +284,7 @@ describe('onRequest handler for /deals', () => {
   // HLR-009
   test('HLR-009: should map keywords in deal name to platform emojis', async () => {
     const testCases = [
+      // Existing
       { name: 'Nintendo Switch Game', expectedEmoji: '🔀' },
       { name: 'Xbox Series X bundle', expectedEmoji: '🟢' },
       { name: 'Steam key for PC game', expectedEmoji: '♨' },
@@ -295,11 +296,24 @@ describe('onRequest handler for /deals', () => {
       { name: 'Art Book limited edition', expectedEmoji: '📚' },
       { name: 'Humble Bundle for charity', expectedEmoji: '📦' },
       { name: 'Collectible Figure', expectedEmoji: '🕴' },
+      // New Keywords
+      { name: 'PS+ discount', expectedEmoji: '🎮' },
+      { name: 'eShop card for Nintendo', expectedEmoji: '🔀' },
+      { name: 'Game-key for Switch', expectedEmoji: '🔀' },
+      { name: 'Official Merch store', expectedEmoji: '👕' },
+      { name: 'Film on Blu-ray', expectedEmoji: '📀' },
+      { name: 'LEGO Star Wars set', expectedEmoji: '🧱' },
+      // LEGO Priority Test
+      { name: 'Nintendo Switch LEGO Game', expectedEmoji: '🔀' }, // Switch has higher priority than LEGO
+      { name: 'LEGO PS5 Controller', expectedEmoji: '🎮' }, // PS5 has higher priority than LEGO
+      { name: 'Just a LEGO brick', expectedEmoji: '🧱' }, // LEGO only
       { name: 'No relevant keywords here', expectedEmoji: '' },
     ];
 
     for (const tc of testCases) {
-      const mockData = { feed: [mockPostBuilder({ record: { text: tc.name } })] };
+      // Ensure each mock builder call has a unique cid and timestamp if they affect sorting or identification,
+      // though for this specific test, only the text matters for platform emoji.
+      const mockData = { feed: [mockPostBuilder({ record: { text: tc.name, createdAt: new Date().toISOString() } })] };
       fetch.mockResolvedValueOnce({
         ok: true,
         json: async () => mockData,
