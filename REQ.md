@@ -79,22 +79,18 @@ This section outlines requirements for the server-side logic, including data fet
 >
 > | Emoji | Keywords                                                     |
 > | :---- | :----------------------------------------------------------- |
-> | 🔀    | "nintendo", "switch", "eShop", "game-key"                    |
-> | 🟢    | "xbox series x", "xbox series s", "xbox"                     |
+> | 🔀    | "nintendo", "switch", "eshop", "game-key"                    |
+> | 🟢    | "xbox"                     |
 > | ♨    | "steam"                                                      |
 > | 👴    | "gog", "good old games"                                      |
-> | 🎮    | "ps4", "ps5", "playstation", "psn", "ps+", "game"            |
-> | 📀    | "dvd", "blu-ray", "bluray", "4k uhd", "uhd", "film"          |
-> | 👕    | "t-shirt", "shirt", "merch"                                  |
+> | 🎮    | "ps4", "ps5", "playstation", "psn", "ps+"            |
+> | 📀    | "dvd", "blu-ray", "bluray", "4k", "uhd", "film"          |
+> | 👕    | "shirt", "merch"                                  |
 > | 💻    | "pc", "computer", "controller", "windows", "cable", "laptop" |
 > | 📚    | "book"                                                       |
-> | 📦    | "humble", "bundle", "box"                                    |
+> | 📦    | "humble", "bundle"                                    |
 > | 🕴    | "figure"                                                     |
-> | 🧱    | "LEGO" (lowest priority)                                     |
-> | 📱    | "ios", "android" (previously listed, maintained)             |
-> | 🎧    | "headphone", "headset" (previously listed, maintained)       |
-> | 📺    | "tv", "monitor" (previously listed, maintained)              |
-> | 🤖    | "robot" (previously listed, maintained)                      |
+> | 🧱    | "LEGO"                                     |
 >
 > **ImplementedBy:** [functions/deals.js](functions/deals.js)
 > **TestedBy:** [tests/deals.test.js](tests/deals.test.js)
