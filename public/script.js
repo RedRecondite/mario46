@@ -49,7 +49,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       tr.className = rowClasses;
 
       const platformTd = document.createElement("td");
-      platformTd.className = "px-6 py-4 whitespace-nowrap text-lg text-center";
+      platformTd.className = "p-0 px-6 py-4 whitespace-nowrap text-xl text-center";
       platformTd.textContent = d.platform;
 
       const priceTd = document.createElement("td");
