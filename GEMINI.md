@@ -173,23 +173,25 @@ This document outlines the strategy for unit testing in this project.
 
 ### Tools and Frameworks
 
-- **Test Runner:** We will use TODO.
-- **Assertion Methods:** TODO
+- **Test Runner:** We will use **Jest** ([https://jestjs.io/](https://jestjs.io/)). Jest is a delightful JavaScript Testing Framework with a focus on simplicity. It provides an integrated environment and typically requires minimal configuration.
+- **Assertion Methods:** Jest comes with a comprehensive set of assertion methods (e.g., `expect(value).toBe(expected)`).
 
 ### Test Organization
 
 - **Directory Structure:** All unit tests will be placed in a dedicated `tests/` directory at the root of the project.
-- **File Naming:** Test files should be named TODO.
-- **Test Case Naming:** Test case classes should be named TODO.
-- **Test Method Naming:** Test methods should be named TODO.
+- **File Naming:** Test files should be named with the `.test.js` suffix (e.g., `deals.test.js` for testing `deals.js`).
+- **Test Case Naming:** Test suites are defined using `describe('A group of tests', () => { ... });`. Individual tests are defined using `test('Does something', () => { ... });` or `it('Does something', () => { ... });`.
+- **Test Method Naming:** Test descriptions should be clear and descriptive of what they are testing.
 
 ### Running Tests
 
 Tests can be run from the command line using the following command:
 
 ```bash
-TODO
+npm test
 ```
+
+This command will execute Jest, which will automatically discover and run all test files in the `tests/` directory.
 
 ### Association with Requirements
 
