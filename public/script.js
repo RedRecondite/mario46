@@ -8,6 +8,23 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   const filterPanel = document.getElementById("filter-panel");
   const filterOptionsContainer = document.getElementById("filter-options");
 
+  const EMPTY_PLATFORM_KEY = "empty_platform_key";
+  const EMOJI_TO_LABEL = {
+    '🔀': 'Nintendo',
+    '🟢': 'Xbox',
+    '♨': 'Steam',
+    '👴': 'GOG',
+    '🎮': 'PlayStation',
+    '📀': 'Physical Media', // (DVD, Blu-ray, 4K UHD)
+    '👕': 'Merchandise', // (Shirt, Merch)
+    '💻': 'PC/Other', // (PC, Computer, Controller, Windows, Cable, Laptop)
+    '📚': 'Book',
+    '📦': 'Bundle', // (Humble Bundle)
+    '🕴': 'Figure',
+    '🧱': 'LEGO',
+    [EMPTY_PLATFORM_KEY]: 'Other/No Platform'
+  };
+
   let seen; // Declare, initialize in fetchAndRender
   let allDeals = []; // Store all fetched deals
   let activeFilters = new Set(); // Store active platform filters
@@ -65,38 +82,49 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   function populateFilterOptions(deals) {
     if (!filterOptionsContainer) return;
 
-    const platforms = new Set(deals.map(d => d.platform).filter(p => p && p.trim() !== ""));
-    // Sort platforms for consistent order, e.g., alphabetically or by frequency
-    const sortedPlatforms = Array.from(platforms).sort();
+    const platformKeys = Object.keys(EMOJI_TO_LABEL);
 
+    let filterOptions = platformKeys.map(key => {
+      const label = EMOJI_TO_LABEL[key];
+      let displayText = label; // Default to label
+      if (key !== EMPTY_PLATFORM_KEY) {
+        // For emojis, prepend the emoji to the label, otherwise it's just the label (e.g. "Other/No Platform")
+        displayText = `${key} ${label}`;
+      }
+      return { key, label, displayText };
+    });
+
+    // Sort by label alphabetically
+    filterOptions.sort((a, b) => a.label.localeCompare(b.label));
 
     filterOptionsContainer.innerHTML = ""; // Clear existing options
 
-    sortedPlatforms.forEach(platform => {
-      const label = document.createElement("label");
-      label.className = "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer";
+    filterOptions.forEach(option => {
+      const labelElement = document.createElement("label");
+      labelElement.className = "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer";
 
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
-      checkbox.value = platform;
+      checkbox.value = option.key; // Use the key (emoji or EMPTY_PLATFORM_KEY) as the value
       checkbox.className = "mr-2";
-      checkbox.checked = activeFilters.has(platform); // Set checked based on loaded/active filters
+      checkbox.checked = activeFilters.has(option.key);
 
       checkbox.addEventListener("change", () => {
         if (checkbox.checked) {
-          activeFilters.add(platform);
+          activeFilters.add(option.key);
         } else {
-          activeFilters.delete(platform);
+          activeFilters.delete(option.key);
         }
         saveFiltersToCookie();
         render(allDeals); // Re-render with new filters
       });
 
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(platform));
-      filterOptionsContainer.appendChild(label);
+      labelElement.appendChild(checkbox);
+      labelElement.appendChild(document.createTextNode(option.displayText));
+      filterOptionsContainer.appendChild(labelElement);
     });
-     if (sortedPlatforms.length === 0) {
+
+    if (filterOptions.length === 0) { // Should not happen if EMOJI_TO_LABEL is populated
         filterOptionsContainer.innerHTML = '<p class="px-4 py-2 text-sm text-gray-500">No platforms to filter.</p>';
     }
   }
@@ -110,10 +138,9 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
     const newSeen = [...seen];
 
     const filteredDeals = deals.filter(deal => {
-      // If no filters are active, show all deals
       if (activeFilters.size === 0) return true;
-      // Otherwise, only show deals whose platform is in the activeFilters set
-      return activeFilters.has(deal.platform);
+      const platformKey = (deal.platform && deal.platform.trim() !== "") ? deal.platform : EMPTY_PLATFORM_KEY;
+      return activeFilters.has(platformKey);
     });
 
     filteredDeals.forEach((d) => {

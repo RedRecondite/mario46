@@ -119,6 +119,8 @@ describe('Frontend Script Logic - script.js', () => {
     delete window.populateFilterOptionsForTest;
     delete window.activeFiltersForTest;
     delete window.dealsScriptInitialized; // Allow script to re-initialize fully
+    delete window.EMOJI_TO_LABEL; // Clean up new global
+    delete window.EMPTY_PLATFORM_KEY; // Clean up new global
 
 
     // Clear cookies by setting them to expire in the past
@@ -299,55 +301,140 @@ describe('Frontend Script Logic - script.js', () => {
   });
 
   // HLR-030, HLR-031: Select/deselect filters and filter deals
-  test('HLR-030, HLR-031: should filter deals based on platform selection', async () => {
-    const mockDeals = [
+  describe('HLR-030, HLR-031, and new filter requirements: Filter Functionality', () => {
+    const mockDealsForFiltering = [
       { id: 'd1', name: 'Switch Game', platform: '🔀', price: '$59.99', url: '', timestamp: '2023-01-01T00:00:00Z' },
       { id: 'd2', name: 'Xbox Game', platform: '🟢', price: '$49.99', url: '', timestamp: '2023-01-02T00:00:00Z' },
       { id: 'd3', name: 'PC Deal', platform: '💻', price: '$39.99', url: '', timestamp: '2023-01-03T00:00:00Z' },
       { id: 'd4', name: 'Another Switch Game', platform: '🔀', price: '$29.99', url: '', timestamp: '2023-01-04T00:00:00Z' },
+      { id: 'd5', name: 'Game with no platform', platform: '', price: '$19.99', url: '', timestamp: '2023-01-05T00:00:00Z' },
+      { id: 'd6', name: 'Game with null platform', platform: null, price: '$9.99', url: '', timestamp: '2023-01-06T00:00:00Z' },
+      { id: 'd7', name: 'Lego Set', platform: '🧱', price: '$89.99', url: '', timestamp: '2023-01-07T00:00:00Z' },
     ];
-    fetch.mockResolvedValueOnce({ ok: true, json: async () => mockDeals });
 
-    await window.fetchAndRenderForTest(); // Initial render with all deals, populates filter options
+    // Defined in script.js, copied here for test verification
+    const EMOJI_TO_LABEL_TEST_COPY = {
+      '🔀': 'Nintendo', '🟢': 'Xbox', '♨': 'Steam', '👴': 'GOG', '🎮': 'PlayStation',
+      '📀': 'Physical Media', '👕': 'Merchandise', '💻': 'PC/Other', '📚': 'Book',
+      '📦': 'Bundle', '🕴': 'Figure', '🧱': 'LEGO',
+      "empty_platform_key": 'Other/No Platform' // Assuming this is the key used in script.js
+    };
+    const EMPTY_PLATFORM_KEY_TEST_COPY = "empty_platform_key";
 
-    const filterOptionsContainer = document.getElementById('filter-options');
-    const switchCheckbox = filterOptionsContainer.querySelector('input[value="🔀"]');
-    const xboxCheckbox = filterOptionsContainer.querySelector('input[value="🟢"]');
 
-    expect(switchCheckbox).not.toBeNull();
-    expect(xboxCheckbox).not.toBeNull();
+    beforeEach(async () => {
+      fetch.mockResolvedValueOnce({ ok: true, json: async () => mockDealsForFiltering });
+      await window.fetchAndRenderForTest(); // Initial render with all deals, populates filter options
+    });
 
-    // Initially, no filters active, all deals shown
-    let rows = document.querySelectorAll('#deals-table tr');
-    expect(rows.length).toBe(4);
+    test('should populate filter options correctly (sorted, with labels, and empty option)', () => {
+      const filterOptionsContainer = document.getElementById('filter-options');
+      const labels = Array.from(filterOptionsContainer.querySelectorAll('label'));
 
-    // Select "Switch" filter
-    switchCheckbox.checked = true;
-    switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    // Need to wait for re-render if it's async. Assuming render is synchronous after event for now.
-    // If render is async, might need await here or check after a promise resolves.
-    rows = document.querySelectorAll('#deals-table tr');
-    expect(rows.length).toBe(2); // d1 and d4
-    expect(Array.from(rows).every(row => row.querySelector('td').textContent === '🔀')).toBe(true);
+      const expectedOrder = Object.entries(EMOJI_TO_LABEL_TEST_COPY)
+        .map(([key, label]) => ({
+          key,
+          label,
+          displayText: key === EMPTY_PLATFORM_KEY_TEST_COPY ? label : `${key} ${label}`
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-    // Also select "Xbox" filter
-    xboxCheckbox.checked = true;
-    xboxCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    rows = document.querySelectorAll('#deals-table tr');
-    expect(rows.length).toBe(3); // d1, d2, d4
+      expect(labels.length).toBe(expectedOrder.length);
 
-    // Deselect "Switch" filter
-    switchCheckbox.checked = false;
-    switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    rows = document.querySelectorAll('#deals-table tr');
-    expect(rows.length).toBe(1); // Only d2 (Xbox)
-    expect(rows[0].querySelector('td').textContent).toBe('🟢');
+      labels.forEach((labelElement, index) => {
+        const checkbox = labelElement.querySelector('input[type="checkbox"]');
+        const textNode = Array.from(labelElement.childNodes).find(node => node.nodeType === Node.TEXT_NODE);
+        const displayedText = textNode ? textNode.textContent.trim() : "";
 
-    // Deselect "Xbox" filter (no filters active)
-    xboxCheckbox.checked = false;
-    xboxCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
-    rows = document.querySelectorAll('#deals-table tr');
-    expect(rows.length).toBe(4); // All deals shown again
+        expect(checkbox.value).toBe(expectedOrder[index].key);
+        expect(displayedText).toBe(expectedOrder[index].displayText);
+      });
+    });
+
+    test('should show all deals (including those with empty/null platform) when no filters are active', () => {
+      const rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(mockDealsForFiltering.length);
+    });
+
+    test('should filter by a single platform (e.g., Nintendo)', () => {
+      const filterOptionsContainer = document.getElementById('filter-options');
+      const switchCheckbox = filterOptionsContainer.querySelector('input[value="🔀"]'); // Nintendo Switch
+
+      switchCheckbox.checked = true;
+      switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(2); // d1 and d4
+      expect(Array.from(rows).every(row => row.querySelector('td').textContent === '🔀')).toBe(true);
+    });
+
+    test('should filter by "Other/No Platform"', () => {
+      const filterOptionsContainer = document.getElementById('filter-options');
+      // Use the actual EMPTY_PLATFORM_KEY defined in the script, exposed for testing or known
+      const otherCheckbox = filterOptionsContainer.querySelector(`input[value="${EMPTY_PLATFORM_KEY_TEST_COPY}"]`);
+      expect(otherCheckbox).not.toBeNull();
+
+      otherCheckbox.checked = true;
+      otherCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(2); // d5 (empty string) and d6 (null)
+      // Check that these rows indeed correspond to d5 and d6 by checking names or other unique properties if needed.
+      const dealNames = Array.from(rows).map(row => row.querySelectorAll('td')[2].textContent);
+      expect(dealNames).toContain('Game with no platform');
+      expect(dealNames).toContain('Game with null platform');
+    });
+
+    test('should filter by multiple platforms (e.g., Nintendo and LEGO)', () => {
+      const filterOptionsContainer = document.getElementById('filter-options');
+      const switchCheckbox = filterOptionsContainer.querySelector('input[value="🔀"]'); // Nintendo
+      const legoCheckbox = filterOptionsContainer.querySelector('input[value="🧱"]'); // LEGO
+
+      switchCheckbox.checked = true;
+      switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+      legoCheckbox.checked = true;
+      legoCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(3); // 2 Switch games, 1 LEGO set
+      const dealPlatforms = Array.from(rows).map(row => row.querySelector('td').textContent);
+      expect(dealPlatforms).toContain('🔀');
+      expect(dealPlatforms).toContain('🧱');
+    });
+
+    test('should filter by a platform and "Other/No Platform" simultaneously', () => {
+      const filterOptionsContainer = document.getElementById('filter-options');
+      const xboxCheckbox = filterOptionsContainer.querySelector('input[value="🟢"]'); // Xbox
+      const otherCheckbox = filterOptionsContainer.querySelector(`input[value="${EMPTY_PLATFORM_KEY_TEST_COPY}"]`);
+
+      xboxCheckbox.checked = true;
+      xboxCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+      otherCheckbox.checked = true;
+      otherCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(3); // 1 Xbox game, 2 no-platform games
+      const dealNames = Array.from(rows).map(row => row.querySelectorAll('td')[2].textContent);
+      expect(dealNames).toContain('Xbox Game');
+      expect(dealNames).toContain('Game with no platform');
+      expect(dealNames).toContain('Game with null platform');
+    });
+
+    test('should show all deals again when all filters are deselected', () => {
+      const filterOptionsContainer = document.getElementById('filter-options');
+      const switchCheckbox = filterOptionsContainer.querySelector('input[value="🔀"]');
+
+      // Select then deselect
+      switchCheckbox.checked = true;
+      switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+      let rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(2);
+
+      switchCheckbox.checked = false;
+      switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+      rows = document.querySelectorAll('#deals-table tr');
+      expect(rows.length).toBe(mockDealsForFiltering.length);
+    });
   });
 
   // HLR-032, HLR-033: Persist and load filter preferences using cookies
@@ -355,7 +442,9 @@ describe('Frontend Script Logic - script.js', () => {
     const mockDealsForCookieTest = [
       { id: 'd1', name: 'Nintendo Game', platform: '🔀', price: '$50', url: '', timestamp: '2023-01-01T00:00:00Z' },
       { id: 'd2', name: 'PC Game', platform: '💻', price: '$40', url: '', timestamp: '2023-01-02T00:00:00Z' },
+      { id: 'd3', name: 'No Platform Game', platform: '', price: '$30', url: '', timestamp: '2023-01-03T00:00:00Z'}
     ];
+    const EMPTY_PLATFORM_KEY_TEST_COPY_COOKIE = "empty_platform_key"; // Align with script
 
     beforeEach(() => {
         // Ensure cookies are clean before each test in this describe block
@@ -383,43 +472,75 @@ describe('Frontend Script Logic - script.js', () => {
       expect(savedFilters).toEqual(['🔀']);
     });
 
-    test('should load and apply filter preferences from a cookie on page load', async () => {
-      // Set a cookie *before* the script runs its initial load sequence
-      const initialFilters = ['💻'];
+    test('should save multiple filter preferences (including empty platform key) to a cookie', async () => {
+      fetch.mockResolvedValueOnce({ ok: true, json: async () => mockDealsForCookieTest });
+      await window.fetchAndRenderForTest();
+
+      const switchCheckbox = document.querySelector('#filter-options input[value="🔀"]');
+      const otherCheckbox = document.querySelector(`#filter-options input[value="${EMPTY_PLATFORM_KEY_TEST_COPY_COOKIE}"]`);
+      expect(switchCheckbox).not.toBeNull();
+      expect(otherCheckbox).not.toBeNull();
+
+      // Select "Switch"
+      switchCheckbox.checked = true;
+      switchCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+      // Select "Other/No Platform"
+      otherCheckbox.checked = true;
+      otherCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+
+      const cookieValue = window.getCookieForTest("platformFilters");
+      expect(cookieValue).not.toBeNull();
+      const savedFilters = JSON.parse(cookieValue);
+      // Order doesn't matter for a Set, but JSON.stringify(Array.from(set)) will have an order.
+      // The important part is that both are present.
+      expect(savedFilters).toContain('🔀');
+      expect(savedFilters).toContain(EMPTY_PLATFORM_KEY_TEST_COPY_COOKIE);
+      expect(savedFilters.length).toBe(2);
+    });
+
+    test('should load and apply filter preferences (including empty platform key) from a cookie on page load', async () => {
+      const initialFilters = ['💻', EMPTY_PLATFORM_KEY_TEST_COPY_COOKIE];
       window.setCookieForTest("platformFilters", JSON.stringify(initialFilters), 1);
 
-      // Mock fetch for the main script execution (simulating a fresh page load)
       fetch.mockResolvedValueOnce({ ok: true, json: async () => mockDealsForCookieTest });
 
-      // Re-run parts of the script's initialization related to loading filters and rendering
-      // This is tricky because the script is already loaded.
-      // The best way is to call the functions that script.js calls on load.
-      // window.loadFiltersFromCookieForTest(); // Call the exposed loader
-      // await window.fetchAndRenderForTest();    // Then fetch and render
+      // The script is reloaded/re-evaluated in the main `beforeEach`.
+      // `loadFiltersFromCookie` should be called during this initialization.
+      // So we just need to call `fetchAndRenderForTest` to populate filters and render.
+      // However, to be certain `loadFiltersFromCookie` has its effect *before* `populateFilterOptions`
+      // we can call it explicitly if the script's init order isn't perfectly testable.
+      // Given the current setup, the main `beforeEach` should handle it.
+      // Let's ensure the script is re-initialized for this test's context if needed.
+      // The `window.dealsScriptInitialized = false;` in global `afterEach` helps here.
 
-      // More robust: Simulate a fresh script load by resetting the init flag and re-evaluating.
-      // This is complex. For now, let's assume loadFiltersFromCookie is called before first fetch.
-      // The `beforeEach` of the main describe block re-runs the script.
-      // So, the cookie set above *should* be picked up by `loadFiltersFromCookie()`
-      // when the script content is re-evaluated in the next `beforeEach` cycle,
-      // or if we manually trigger the load sequence here.
+      // We need to ensure `loadFiltersFromCookieForTest` is called to update `activeFilters`
+      // based on the cookie *before* `populateFilterOptions` and `render` use `activeFilters`.
+      // The global beforeEach re-runs the script, which includes `loadFiltersFromCookie();`
+      // and then `fetchAndRender();`
 
-      // For this specific test, let's directly test loadFiltersFromCookie and then render
-      window.loadFiltersFromCookieForTest(); // Manually load for this test case
+      // To be absolutely sure for this test, let's manually call loadFiltersFromCookieForTest
+      // as it's part of the setup for the state we want to test.
+      window.loadFiltersFromCookieForTest(); // Manually load filters from cookie
+
+      await window.fetchAndRenderForTest(); // This will populate options and render deals
+
       const loadedActiveFilters = window.activeFiltersForTest();
       expect(loadedActiveFilters.has('💻')).toBe(true);
-
-
-      await window.fetchAndRenderForTest(); // This will use the loaded filters
+      expect(loadedActiveFilters.has(EMPTY_PLATFORM_KEY_TEST_COPY_COOKIE)).toBe(true);
 
       const rows = document.querySelectorAll('#deals-table tr');
-      expect(rows.length).toBe(1); // Only PC game should be rendered
-      expect(rows[0].querySelector('td').textContent).toBe('💻');
+      // Expect PC game (d2) and No Platform game (d3)
+      expect(rows.length).toBe(2);
+      const dealNames = Array.from(rows).map(row => row.querySelectorAll('td')[2].textContent);
+      expect(dealNames).toContain('PC Game');
+      expect(dealNames).toContain('No Platform Game');
 
-      // Check if the PC checkbox is checked
       const pcCheckbox = document.querySelector('#filter-options input[value="💻"]');
+      const otherCheckbox = document.querySelector(`#filter-options input[value="${EMPTY_PLATFORM_KEY_TEST_COPY_COOKIE}"]`);
       expect(pcCheckbox).not.toBeNull();
       expect(pcCheckbox.checked).toBe(true);
+      expect(otherCheckbox).not.toBeNull();
+      expect(otherCheckbox.checked).toBe(true);
     });
 
     test('should clear active filters if cookie contains invalid JSON', async () => {
@@ -439,7 +560,7 @@ describe('Frontend Script Logic - script.js', () => {
         expect(activeFilters.size).toBe(0); // Filters should be empty
 
         const rows = document.querySelectorAll('#deals-table tr');
-        expect(rows.length).toBe(2); // All deals should be shown as filters are cleared
+        expect(rows.length).toBe(mockDealsForCookieTest.length); // All deals should be shown
 
         consoleErrorSpy.mockRestore();
     });
