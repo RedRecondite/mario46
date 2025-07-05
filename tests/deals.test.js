@@ -296,13 +296,29 @@ describe('onRequest handler for /deals', () => {
       { name: 'Art Book limited edition', expectedEmoji: '📚' },
       { name: 'Humble Bundle for charity', expectedEmoji: '📦' },
       { name: 'Collectible Figure', expectedEmoji: '🕴' },
-      // New Keywords
+      // New Keywords for existing emojis from previous updates
       { name: 'PS+ discount', expectedEmoji: '🎮' },
       { name: 'eShop card for Nintendo', expectedEmoji: '🔀' },
       { name: 'Game-key for Switch', expectedEmoji: '🔀' },
       { name: 'Official Merch store', expectedEmoji: '👕' },
       { name: 'Film on Blu-ray', expectedEmoji: '📀' },
       { name: 'LEGO Star Wars set', expectedEmoji: '🧱' },
+      // Keywords for this request
+      { name: 'Kindle edition book', expectedEmoji: '📚' },
+      { name: 'Hardcover novel', expectedEmoji: '📚' },
+      { name: 'Cute Plush toy', expectedEmoji: '🕴' },
+      { name: 'Halloween costume figure', expectedEmoji: '🕴' },
+      { name: 'Action figure toy', expectedEmoji: '🕴' },
+      { name: 'Christmas ornament figure', expectedEmoji: '🕴' },
+      { name: 'amiibo figure for Switch', expectedEmoji: '🕴' },
+      { name: 'Gaming Monitors on sale', expectedEmoji: '💻' },
+      // New keywords from this batch
+      { name: 'PC Gaming Accessories', expectedEmoji: '💻' },
+      { name: 'New Apple Macbook Air', expectedEmoji: '💻' },
+      { name: 'Movie night Blu-ray', expectedEmoji: '📀' },
+      { name: 'Youtube streaming device', expectedEmoji: '📀' },
+      { name: 'Classic Animation Collection DVD', expectedEmoji: '📀' },
+      { name: 'Nanoblock Pokemon set', expectedEmoji: '🧱' },
       // LEGO Priority Test
       { name: 'Nintendo Switch LEGO Game', expectedEmoji: '🔀' }, // Switch has higher priority than LEGO
       { name: 'LEGO PS5 Controller', expectedEmoji: '🎮' }, // PS5 has higher priority than LEGO

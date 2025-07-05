@@ -1,18 +1,18 @@
 // Fetch latest posts from Wario64 on Bluesky and expose as JSON
 
 const PLATFORM_MAP = [
+  { keywords: ['figure', 'plush', 'costume', 'toy', 'ornament', 'amiibo'], emoji: '🕴' }, // Moved up
   { keywords: ['nintendo', 'switch', 'eshop', 'game-key'], emoji: '🔀' }, 
   { keywords: ['xbox'], emoji: '🟢' },
   { keywords: ['steam'], emoji: '♨' },
   { keywords: ['gog', 'good old games'], emoji: '👴' },
   { keywords: ['ps4', 'ps5', 'playstation', 'psn', 'ps+'], emoji: '🎮' }, 
-  { keywords: ['dvd', 'blu-ray', 'bluray', '4k', 'uhd', 'film'], emoji: '📀' }, 
+  { keywords: ['dvd', 'blu-ray', 'bluray', '4k', 'uhd', 'film', 'movie', 'youtube', 'animation'], emoji: '📀' },
   { keywords: ['shirt', 'merch'], emoji: '👕' }, 
-  { keywords: ['pc', 'computer', 'controller', 'windows', 'cable', 'laptop'], emoji: '💻' },
-  { keywords: ['book'], emoji: '📚' },
+  { keywords: ['pc', 'computer', 'controller', 'windows', 'cable', 'laptop', 'monitor', 'accessories', 'apple'], emoji: '💻' },
+  { keywords: ['book', 'kindle', 'hardcover'], emoji: '📚' },
   { keywords: ['humble', 'bundle'], emoji: '📦' },
-  { keywords: ['figure'], emoji: '🕴' },
-  { keywords: ['lego'], emoji: '🧱' }, 
+  { keywords: ['lego', 'nanoblock'], emoji: '🧱' },
 ];
 
 function getPlatformEmoji(description) {
