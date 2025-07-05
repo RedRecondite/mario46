@@ -84,13 +84,13 @@ This section outlines requirements for the server-side logic, including data fet
 > | ♨    | "steam"                                                      |
 > | 👴    | "gog", "good old games"                                      |
 > | 🎮    | "ps4", "ps5", "playstation", "psn", "ps+"            |
-> | 📀    | "dvd", "blu-ray", "bluray", "4k", "uhd", "film"          |
+> | 📀    | "dvd", "blu-ray", "bluray", "4k", "uhd", "film", "movie", "youtube", "animation" |
 > | 👕    | "shirt", "merch"                                  |
-> | 💻    | "pc", "computer", "controller", "windows", "cable", "laptop" |
-> | 📚    | "book"                                                       |
+> | 💻    | "pc", "computer", "controller", "windows", "cable", "laptop", "monitors", "accessories", "apple" |
+> | 📚    | "book", "kindle", "hardcover"                                |
 > | 📦    | "humble", "bundle"                                    |
-> | 🕴    | "figure"                                                     |
-> | 🧱    | "LEGO"                                     |
+> | 🕴    | "figure", "plush", "costume", "toy", "ornament", "amiibo"    |
+> | 🧱    | "LEGO", "nanoblock"                                     |
 >
 > - **ImplementedBy:** [functions/deals.js](functions/deals.js)
 > - **TestedBy:** [tests/deals.test.js](tests/deals.test.js)
