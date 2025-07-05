@@ -86,7 +86,7 @@ This section outlines requirements for the server-side logic, including data fet
 > | 🎮    | "ps4", "ps5", "playstation", "psn", "ps+"            |
 > | 📀    | "dvd", "blu-ray", "bluray", "4k", "uhd", "film", "movie", "youtube", "animation" |
 > | 👕    | "shirt", "merch"                                  |
-> | 💻    | "pc", "computer", "controller", "windows", "cable", "laptop", "monitors", "accessories", "apple" |
+> | 💻    | "pc", "computer", "controller", "windows", "cable", "laptop", "monitor", "accessories", "apple" |
 > | 📚    | "book", "kindle", "hardcover"                                |
 > | 📦    | "humble", "bundle"                                    |
 > | 🕴    | "figure", "plush", "costume", "toy", "ornament", "amiibo"    |
