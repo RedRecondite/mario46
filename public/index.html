@@ -8,7 +8,21 @@
 </head>
 <body class="bg-gray-50">
   <div class="max-w-4xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-4 text-center">Wario64 Deals</h1>
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-3xl font-bold text-center">Wario64 Deals</h1>
+      <div class="relative">
+        <button id="filter-menu-button" class="p-2 rounded-md hover:bg-gray-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div id="filter-panel" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+          <div class="py-1" id="filter-options">
+            <!-- Filter options will be populated here by script.js -->
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="overflow-x-auto">
       <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead class="bg-gray-100">
