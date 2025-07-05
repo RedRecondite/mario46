@@ -160,11 +160,11 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       platformTd.textContent = d.platform;
 
       const priceTd = document.createElement("td");
-      priceTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-700 min-w-[6rem]";
+      priceTd.className = "px-3 py-2 whitespace-nowrap text-sm text-gray-700 min-w-[6rem]";
       priceTd.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
 
       const nameTd = document.createElement("td");
-      nameTd.className = "px-6 py-4 whitespace-nowrap text-sm text-gray-900";
+      nameTd.className = "px-3 py-2 whitespace-nowrap text-sm text-gray-900";
       nameTd.textContent = d.name;
 
       tr.append(platformTd, priceTd, nameTd);
