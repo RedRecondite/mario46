@@ -68,7 +68,6 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   }
 
   async function fetchAndRender() {
-    seen = new Set(JSON.parse(localStorage.getItem("seenDeals") || "[]"));
     try {
       const data = await fetch(API).then((r) => r.json());
       allDeals = data; // Store all deals
@@ -135,7 +134,6 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       return;
     }
     tbody.innerHTML = "";
-    const newSeen = [...seen];
 
     const filteredDeals = deals.filter(deal => {
       if (activeFilters.size === 0) return true;
@@ -147,12 +145,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       const tr = document.createElement("tr");
       tr.dataset.dealId = d.id;
 
-      let rowClasses = "transition-opacity duration-1000 hover:bg-gray-50";
-      if (seen.has(d.id)) {
-        rowClasses += " opacity-50";
-      } else {
-        rowClasses += " opacity-100";
-      }
+      let rowClasses = "hover:bg-gray-50"; // Removed transition-opacity and opacity classes
 
       if (d.url && d.url.trim() !== "") {
         tr.onclick = () => window.open(d.url, "_blank");
@@ -176,13 +169,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
 
       tr.append(platformTd, priceTd, nameTd);
       tbody.appendChild(tr);
-
-      if (!seen.has(d.id)) {
-        seen.add(d.id);
-        newSeen.push(d.id);
-      }
     });
-    localStorage.setItem("seenDeals", JSON.stringify(Array.from(newSeen)));
   }
 
   // Event Listeners

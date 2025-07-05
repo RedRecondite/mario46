@@ -109,7 +109,6 @@ describe('Frontend Script Logic - script.js', () => {
     // document.head.innerHTML = ''; // Clean up script tag - too broad
     // Reset any global state if necessary, e.g., if script.js creates globals
     delete window.API;
-    // delete window.seenDealIDs; // This was a typo before, seenDeals is used by script
     delete window.pollIntervalId;
     delete window.fetchAndRenderForTest; // Clean up exposed function
     delete window.getCookieForTest;
@@ -215,54 +214,6 @@ describe('Frontend Script Logic - script.js', () => {
 
     row.dispatchEvent(new MouseEvent('click', { bubbles: true })); // Simulate click
     expect(window.open).not.toHaveBeenCalled();
-  });
-
-  // HLR-022, HLR-023, HLR-024, HLR-025: Seen deals logic
-  test('HLR-022, HLR-023, HLR-024, HLR-025: should handle seen deals using localStorage and opacity', async () => {
-    // Pre-populate localStorage with one seen deal
-    localStorageMock.setItem('seenDeals', JSON.stringify(['s1'])); // Corrected key
-
-    const mockDeals = [
-      { id: 's1', name: 'Seen Deal', platform: '👀', price: '$1', url: '', timestamp: '2023-01-01T00:00:00Z' }, // Already seen
-      { id: 'n1', name: 'New Deal', platform: '✨', price: '$2', url: '', timestamp: '2023-01-02T00:00:00Z' },   // New
-    ];
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      status: 200,
-      json: async () => mockDeals,
-    });
-
-    // Execute script again to load these deals
-    // const scriptElement = document.createElement('script');
-    // scriptElement.textContent = scriptContent;
-    // document.head.appendChild(scriptElement);
-    // await Promise.resolve(); // Wait for fetch and rendering
-    await window.fetchAndRenderForTest(); // Manually call
-
-    const rows = document.querySelectorAll('#deals-table tr');
-    // Deals are prepended, so 'n1' (newest) will be row 0, 's1' will be row 1
-    const newDealRow = Array.from(rows).find(row => row.dataset.dealId === 'n1');
-    const seenDealRow = Array.from(rows).find(row => row.dataset.dealId === 's1');
-
-    expect(newDealRow).not.toBeNull();
-    expect(seenDealRow).not.toBeNull();
-
-    // HLR-023: New deal full opacity (or no specific opacity style, defaults to 1)
-    expect(newDealRow.style.opacity).toBe(''); // Or '1' if explicitly set
-
-    // HLR-024: Seen deal reduced opacity
-    expect(seenDealRow.classList.contains('opacity-50')).toBe(true);
-
-
-    // HLR-022, HLR-025: After rendering, 'n1' should now be in localStorage
-    // The script adds to seenDeals *after* processing/rendering each deal.
-    // The setItem would be called once after the loop in the modified script.js
-    const lastSetItemCall = localStorageMock.setItem.mock.calls[localStorageMock.setItem.mock.calls.length - 1];
-    expect(lastSetItemCall[0]).toBe('seenDeals');
-    const storedSeenIDs = JSON.parse(lastSetItemCall[1]);
-
-    expect(storedSeenIDs).toContain('s1'); // Original
-    expect(storedSeenIDs).toContain('n1'); // Newly added
   });
 
   test('should handle fetch error gracefully for /deals endpoint', async () => {

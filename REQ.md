@@ -183,34 +183,6 @@ This section details requirements for the client-side user interface. This inclu
 > - **ImplementedBy:** [public/script.js](public/script.js)
 > - **TestedBy:** [tests/script.test.js](tests/script.test.js)
 
-### HLR-022
-
-> The system shall persist the set of seen deal IDs in `localStorage` to maintain state across page loads.  
->
-> - **ImplementedBy:** [public/script.js](public/script.js)
-> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
-
-### HLR-023
-
-> The system shall initially display new (not previously seen) deals with full opacity.  
->
-> - **ImplementedBy:** [public/script.js](public/script.js)
-> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
-
-### HLR-024
-
-> The system shall display previously seen deals with reduced opacity.  
->
-> - **ImplementedBy:** [public/script.js](public/script.js)
-> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
-
-### HLR-025
-
-> The system shall mark a deal as seen (and update its visual representation and persisted state) after it has been rendered.  
->
-> - **ImplementedBy:** [public/script.js](public/script.js)
-> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
-
 ### HLR-026
 
 > The system shall display "Wario64 Deals" as the HTML page title.  
