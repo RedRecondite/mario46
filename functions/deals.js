@@ -9,7 +9,7 @@ const PLATFORM_MAP = [
   { keywords: ['ps4', 'ps5', 'playstation', 'psn', 'ps+'], emoji: '🎮' }, 
   { keywords: ['dvd', 'blu-ray', 'bluray', '4k', 'uhd', 'film', 'movie', 'youtube', 'animation'], emoji: '📀' },
   { keywords: ['shirt', 'merch'], emoji: '👕' }, 
-  { keywords: ['pc', 'computer', 'controller', 'windows', 'cable', 'laptop', 'monitors', 'accessories', 'apple'], emoji: '💻' },
+  { keywords: ['pc', 'computer', 'controller', 'windows', 'cable', 'laptop', 'monitor', 'accessories', 'apple'], emoji: '💻' },
   { keywords: ['book', 'kindle', 'hardcover'], emoji: '📚' },
   { keywords: ['humble', 'bundle'], emoji: '📦' },
   { keywords: ['lego', 'nanoblock'], emoji: '🧱' },
