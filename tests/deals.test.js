@@ -287,6 +287,7 @@ describe('onRequest handler for /deals', () => {
       // Existing
       { name: 'Nintendo Switch Game', expectedEmoji: '🔀' },
       { name: 'Xbox Series X bundle', expectedEmoji: '🟢' },
+      { name: 'XBO game', expectedEmoji: '🟢' },
       { name: 'Steam key for PC game', expectedEmoji: '♨' },
       { name: 'GOG classic title', expectedEmoji: '👴' },
       { name: 'PS5 new release', expectedEmoji: '🎮' },

@@ -3,7 +3,7 @@
 const PLATFORM_MAP = [
   { keywords: ['figure', 'plush', 'costume', 'toy', 'ornament', 'amiibo'], emoji: '🕴' }, // Moved up
   { keywords: ['nintendo', 'switch', 'eshop', 'game-key'], emoji: '🔀' }, 
-  { keywords: ['xbox'], emoji: '🟢' },
+  { keywords: ['xbox', 'xbo'], emoji: '🟢' },
   { keywords: ['steam'], emoji: '♨' },
   { keywords: ['gog', 'good old games'], emoji: '👴' },
   { keywords: ['ps4', 'ps5', 'playstation', 'psn', 'ps+'], emoji: '🎮' }, 
