@@ -80,7 +80,7 @@ This section outlines requirements for the server-side logic, including data fet
 > | Emoji | Keywords                                                     |
 > | :---- | :----------------------------------------------------------- |
 > | 🔀    | "nintendo", "switch", "eshop", "game-key"                    |
-> | 🟢    | "xbox"                     |
+> | 🟢    | "xbox", "xbo"                     |
 > | ♨    | "steam"                                                      |
 > | 👴    | "gog", "good old games"                                      |
 > | 🎮    | "ps4", "ps5", "playstation", "psn", "ps+"            |
