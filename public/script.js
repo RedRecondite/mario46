@@ -30,14 +30,9 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   let activeFilters = new Set(); // Store active platform filters
 
   // Cookie handling functions
-  function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-      const date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      expires = "; expires=" + date.toUTCString();
-    }
-    document.cookie = name + "=" + (value || "") + expires + "; path=/; SameSite=Lax";
+  function setCookie(name, value) {
+    const farFutureDate = "expires=Fri, 31 Dec 9999 23:59:59 GMT";
+    document.cookie = `${name}=${value || ""}; ${farFutureDate}; path=/; SameSite=Lax`;
   }
 
   function getCookie(name) {
@@ -64,7 +59,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   }
 
   function saveFiltersToCookie() {
-    setCookie("platformFilters", JSON.stringify(Array.from(activeFilters)), 7); // Save for 7 days
+    setCookie("platformFilters", JSON.stringify(Array.from(activeFilters)));
   }
 
   async function fetchAndRender() {
