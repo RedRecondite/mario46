@@ -7,33 +7,40 @@
   <title>Wario64 Deals</title>
 </head>
 <body class="bg-gray-50">
-  <div class="max-w-4xl mx-auto p-6">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-3xl font-bold text-center">Wario64 Deals</h1>
+  <div class="max-w-4xl mx-auto p-3 sm:p-6">
+    <div class="flex flex-wrap justify-between items-center gap-3 mb-4 sm:mb-6">
+      <h1 class="text-2xl sm:text-3xl font-bold flex-1 min-w-0">Wario64 Deals</h1>
       <div class="relative">
-        <button id="filter-menu-button" class="p-2 rounded-md hover:bg-gray-200">
+        <button id="filter-menu-button" class="p-2 rounded-md hover:bg-gray-200 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <div id="filter-panel" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+        <div id="filter-panel" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-10 border border-gray-200 max-h-96 overflow-y-auto">
           <div class="py-1" id="filter-options">
             <!-- Filter options will be populated here by script.js -->
           </div>
         </div>
       </div>
     </div>
-    <div class="overflow-x-auto">
+
+    <!-- Desktop Table View -->
+    <div class="hidden sm:block overflow-x-auto">
       <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead class="bg-gray-100">
           <tr>
-            <th class="px-6 py-3 text-center text-sm font-semibold uppercase"></th>
-            <th class="px-6 py-3 text-left text-sm font-semibold uppercase min-w-[6rem]">Price</th>
-            <th class="px-6 py-3 text-left text-sm font-semibold uppercase">Item</th>
+            <th class="px-4 py-3 text-center text-xs font-semibold uppercase tracking-wide w-12"></th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide w-24">Price</th>
+            <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide">Item</th>
           </tr>
         </thead>
         <tbody id="deals-table" class="divide-y divide-gray-200"></tbody>
       </table>
+    </div>
+
+    <!-- Mobile Card View -->
+    <div class="sm:hidden">
+      <div id="deals-cards" class="space-y-3"></div>
     </div>
   </div>
   <script src="/script.js"></script>

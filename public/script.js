@@ -4,6 +4,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   // Polls /deals and renders with Tailwind styling + fade in/out
   const API = "/deals";
   const tbody = document.getElementById("deals-table");
+  const cardsContainer = document.getElementById("deals-cards");
   const filterMenuButton = document.getElementById("filter-menu-button");
   const filterPanel = document.getElementById("filter-panel");
   const filterOptionsContainer = document.getElementById("filter-options");
@@ -124,11 +125,12 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   }
 
   function render(deals) {
-    if (!tbody) {
-      console.error("[script.js] Table body ('tbody' variable) is null in render(). Ensure #deals-table exists when script loads.");
+    if (!tbody || !cardsContainer) {
+      console.error("[script.js] Table body or cards container is null in render(). Ensure #deals-table and #deals-cards exist when script loads.");
       return;
     }
     tbody.innerHTML = "";
+    cardsContainer.innerHTML = "";
 
     const filteredDeals = deals.filter(deal => {
       if (activeFilters.size === 0) return true;
@@ -137,10 +139,11 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
     });
 
     filteredDeals.forEach((d) => {
+      // Render desktop table row
       const tr = document.createElement("tr");
       tr.dataset.dealId = d.id;
 
-      let rowClasses = "hover:bg-gray-50"; // Removed transition-opacity and opacity classes
+      let rowClasses = "hover:bg-gray-50 transition-colors";
 
       if (d.url && d.url.trim() !== "") {
         tr.onclick = () => window.open(d.url, "_blank");
@@ -151,19 +154,61 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       tr.className = rowClasses;
 
       const platformTd = document.createElement("td");
-      platformTd.className = "p-0 whitespace-nowrap text-2xl text-center";
-      platformTd.textContent = d.platform;
+      platformTd.className = "px-2 py-3 text-2xl text-center";
+      platformTd.textContent = d.platform || "";
 
       const priceTd = document.createElement("td");
-      priceTd.className = "px-3 py-2 whitespace-nowrap text-sm text-gray-700 min-w-[6rem]";
+      priceTd.className = "px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900";
       priceTd.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
 
       const nameTd = document.createElement("td");
-      nameTd.className = "px-3 py-2 whitespace-nowrap text-sm text-gray-900";
+      nameTd.className = "px-3 py-3 text-sm text-gray-700 break-words";
       nameTd.textContent = d.name;
 
       tr.append(platformTd, priceTd, nameTd);
       tbody.appendChild(tr);
+
+      // Render mobile card
+      const card = document.createElement("div");
+      card.dataset.dealId = d.id;
+      card.className = "bg-white rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg";
+
+      if (d.url && d.url.trim() !== "") {
+        card.onclick = () => window.open(d.url, "_blank");
+        card.className += " cursor-pointer active:scale-[0.98] transition-transform";
+      }
+
+      const cardContent = document.createElement("div");
+      cardContent.className = "p-4";
+
+      const header = document.createElement("div");
+      header.className = "flex items-start gap-3 mb-2";
+
+      const platformSpan = document.createElement("span");
+      platformSpan.className = "text-3xl flex-shrink-0";
+      platformSpan.textContent = d.platform || "📦";
+
+      const nameDiv = document.createElement("div");
+      nameDiv.className = "flex-1 min-w-0";
+
+      const nameText = document.createElement("p");
+      nameText.className = "text-sm font-medium text-gray-900 leading-snug break-words";
+      nameText.textContent = d.name;
+
+      nameDiv.appendChild(nameText);
+      header.append(platformSpan, nameDiv);
+
+      const priceDiv = document.createElement("div");
+      priceDiv.className = "mt-2 pt-2 border-t border-gray-100";
+
+      const priceText = document.createElement("p");
+      priceText.className = "text-lg font-semibold text-gray-900";
+      priceText.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
+
+      priceDiv.appendChild(priceText);
+      cardContent.append(header, priceDiv);
+      card.appendChild(cardContent);
+      cardsContainer.appendChild(card);
     });
   }
 
