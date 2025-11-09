@@ -232,6 +232,48 @@ This section details requirements for the client-side user interface. This inclu
 
 ### HLR-028
 
-> The system shall use Tailwind CSS for styling the user interface elements.  
+> The system shall use Tailwind CSS for styling the user interface elements.
 >
 > - **ImplementedBy:** [public/index.html](public/index.html)
+
+### HLR-034
+
+> The system shall provide a mobile-responsive layout that adapts to different screen sizes using responsive breakpoints (e.g., 640px for small screens).
+>
+> - **ImplementedBy:** [public/index.html](public/index.html), [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-035
+
+> The system shall display deals as a table view on desktop screens (≥640px width).
+>
+> - **ImplementedBy:** [public/index.html](public/index.html), [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-036
+
+> The system shall display deals as compact card components on mobile screens (<640px width).
+>
+> - **ImplementedBy:** [public/index.html](public/index.html), [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-037
+
+> The system shall clean item names by removing URLs (http://, https://, www.) before displaying them to improve readability.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-038
+
+> The mobile card layout shall display the platform emoji and price in a left column with the item name in the right column to maximize information density.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)
+
+### HLR-039
+
+> The system shall make mobile cards clickable if a valid URL is associated with the deal, opening the URL in a new tab when tapped.
+>
+> - **ImplementedBy:** [public/script.js](public/script.js)
+> - **TestedBy:** [tests/script.test.js](tests/script.test.js)

@@ -63,6 +63,7 @@ function setupFilterDOM() {
     <table id="deals-table-container">
       <tbody id="deals-table"></tbody>
     </table>
+    <div id="deals-cards"></div>
   `;
 }
 
