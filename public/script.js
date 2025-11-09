@@ -30,6 +30,13 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
   let allDeals = []; // Store all fetched deals
   let activeFilters = new Set(); // Store active platform filters
 
+  // Helper function to clean item names by removing URLs
+  function cleanItemName(name) {
+    if (!name) return name;
+    // Remove URLs (http://, https://, www.)
+    return name.replace(/https?:\/\/\S+/g, '').replace(/www\.\S+/g, '').trim();
+  }
+
   // Cookie handling functions
   function setCookie(name, value) {
     const farFutureDate = "expires=Fri, 31 Dec 9999 23:59:59 GMT";
@@ -139,6 +146,8 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
     });
 
     filteredDeals.forEach((d) => {
+      const cleanName = cleanItemName(d.name);
+
       // Render desktop table row
       const tr = document.createElement("tr");
       tr.dataset.dealId = d.id;
@@ -163,7 +172,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
 
       const nameTd = document.createElement("td");
       nameTd.className = "px-3 py-3 text-sm text-gray-700 break-words";
-      nameTd.textContent = d.name;
+      nameTd.textContent = cleanName;
 
       tr.append(platformTd, priceTd, nameTd);
       tbody.appendChild(tr);
@@ -171,7 +180,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       // Render mobile card
       const card = document.createElement("div");
       card.dataset.dealId = d.id;
-      card.className = "bg-white rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg";
+      card.className = "bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-shadow hover:shadow-md";
 
       if (d.url && d.url.trim() !== "") {
         card.onclick = () => window.open(d.url, "_blank");
@@ -179,34 +188,25 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       }
 
       const cardContent = document.createElement("div");
-      cardContent.className = "p-4";
-
-      const header = document.createElement("div");
-      header.className = "flex items-start gap-3 mb-2";
+      cardContent.className = "flex items-center gap-3 p-3";
 
       const platformSpan = document.createElement("span");
-      platformSpan.className = "text-3xl flex-shrink-0";
+      platformSpan.className = "text-2xl flex-shrink-0";
       platformSpan.textContent = d.platform || "📦";
 
-      const nameDiv = document.createElement("div");
-      nameDiv.className = "flex-1 min-w-0";
+      const contentDiv = document.createElement("div");
+      contentDiv.className = "flex-1 min-w-0";
 
       const nameText = document.createElement("p");
-      nameText.className = "text-sm font-medium text-gray-900 leading-snug break-words";
-      nameText.textContent = d.name;
-
-      nameDiv.appendChild(nameText);
-      header.append(platformSpan, nameDiv);
-
-      const priceDiv = document.createElement("div");
-      priceDiv.className = "mt-2 pt-2 border-t border-gray-100";
+      nameText.className = "text-sm text-gray-900 leading-tight break-words mb-1";
+      nameText.textContent = cleanName;
 
       const priceText = document.createElement("p");
-      priceText.className = "text-lg font-semibold text-gray-900";
+      priceText.className = "text-base font-semibold text-gray-900";
       priceText.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
 
-      priceDiv.appendChild(priceText);
-      cardContent.append(header, priceDiv);
+      contentDiv.append(nameText, priceText);
+      cardContent.append(platformSpan, contentDiv);
       card.appendChild(cardContent);
       cardsContainer.appendChild(card);
     });
