@@ -180,7 +180,7 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       // Render mobile card
       const card = document.createElement("div");
       card.dataset.dealId = d.id;
-      card.className = "bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden transition-shadow hover:shadow-md";
+      card.className = "bg-white rounded shadow-sm border border-gray-200 overflow-hidden transition-shadow hover:shadow-md";
 
       if (d.url && d.url.trim() !== "") {
         card.onclick = () => window.open(d.url, "_blank");
@@ -188,25 +188,28 @@ if (typeof window.dealsScriptInitialized === 'undefined') {
       }
 
       const cardContent = document.createElement("div");
-      cardContent.className = "flex items-center gap-3 p-3";
+      cardContent.className = "flex gap-2 p-2";
+
+      // Left column: emoji and price stacked
+      const leftColumn = document.createElement("div");
+      leftColumn.className = "flex flex-col items-center justify-start gap-0.5 flex-shrink-0 w-16";
 
       const platformSpan = document.createElement("span");
-      platformSpan.className = "text-2xl flex-shrink-0";
+      platformSpan.className = "text-xl";
       platformSpan.textContent = d.platform || "📦";
 
-      const contentDiv = document.createElement("div");
-      contentDiv.className = "flex-1 min-w-0";
-
-      const nameText = document.createElement("p");
-      nameText.className = "text-sm text-gray-900 leading-tight break-words mb-1";
-      nameText.textContent = cleanName;
-
       const priceText = document.createElement("p");
-      priceText.className = "text-base font-semibold text-gray-900";
+      priceText.className = "text-xs font-semibold text-gray-900 text-center leading-tight";
       priceText.textContent = (d.price && d.price.trim() !== "") ? d.price : "N/A";
 
-      contentDiv.append(nameText, priceText);
-      cardContent.append(platformSpan, contentDiv);
+      leftColumn.append(platformSpan, priceText);
+
+      // Right column: name only
+      const nameText = document.createElement("p");
+      nameText.className = "text-sm text-gray-900 leading-snug break-words flex-1";
+      nameText.textContent = cleanName;
+
+      cardContent.append(leftColumn, nameText);
       card.appendChild(cardContent);
       cardsContainer.appendChild(card);
     });
